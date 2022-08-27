@@ -1,5 +1,8 @@
 # coding=utf-8
 import unittest
+import os
+import HTMLTestRunner
+
 from Base import base_request
 
 host = "https://work.liankeyun.com/"
@@ -22,8 +25,15 @@ class LiankeyunCase(unittest.TestCase):
         request = base_request.BaseRequest()
         res = request.run_main("post", url, headers, data)
         # print(type(res))
-        self.assertEqual(res["code"], 200)
+        self.assertEqual(res["code"], 201)
 
 
 if __name__ == "__main__":
-    unittest.main()
+    suite = unittest.TestSuite()
+    suite.addTest(LiankeyunCase("test_page"))
+    report_path = os.path.dirname(os.getcwd()) + "/Report/report.html"
+    with open(report_path, "wb")as f:
+        runner = HTMLTestRunner.HTMLTestRunner(stream=f, title="cwz", description="cwz test")
+        runner.run(suite)
+    f.close()
+    # unittest.main()
